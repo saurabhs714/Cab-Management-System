@@ -2,6 +2,7 @@ package com.cabbooking.database;
 
 import com.cabbooking.Exceptions.CabNotFoundException;
 import com.cabbooking.Exceptions.NoCabsAvailableException;
+import com.cabbooking.Exceptions.ServiceNotAvailableException;
 import com.cabbooking.constants.CabStatus;
 import com.cabbooking.model.Cab;
 import com.cabbooking.model.Location;
@@ -20,6 +21,7 @@ public class TripsManager {
 
     private CabsManager cabsManager;
     private RidersManager ridersManager;
+    private LocationManager locationManager;
     private CabMatchingStrategy cabMatchingStrategy;
 
     public TripsManager(
@@ -35,6 +37,11 @@ public class TripsManager {
             @NonNull final Rider rider,
             @NonNull final Location fromLoc,
             @NonNull final Location toLoc) {
+
+        if(locationManager.isLocationExist(fromLoc) || locationManager.isLocationExist(toLoc)) {
+            throw new ServiceNotAvailableException("Selected Destinations is not servable!!!");
+        }
+
         final List<Cab> closeByCabs =
                 cabsManager.getCabs(fromLoc);
         final List<Cab> availableCabs = closeByCabs.stream()

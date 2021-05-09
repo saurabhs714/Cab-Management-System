@@ -18,4 +18,11 @@ public class LocationManager {
 
         eligibleLocation.put(location.getId(), location);
     }
+
+    public boolean isLocationExist(@NonNull final Location location) {
+        if (!eligibleLocation.containsKey(location.getId())) {
+            return false;
+        }
+        return true;
+    }
 }
