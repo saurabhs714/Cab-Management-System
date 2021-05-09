@@ -7,15 +7,11 @@ import com.cabbooking.model.Cab;
 import com.cabbooking.model.Location;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CabsManager {
 
     Map<String, Cab> cabs = new HashMap<>();
-    List<Location> eligibleLoc = new ArrayList<>();
 
     public void registerCab(@NonNull final Cab newCab) {
         if (cabs.containsKey(newCab.getId())) {
@@ -30,7 +26,9 @@ public class CabsManager {
             throw new CabNotFoundException("Cab Not Found!!!");
         }
 
-        cabs.get(cab.getId()).setStatus(cabStatus);
+        Cab cabDetails = cabs.get(cab.getId());
+        cabDetails.setStatus(cabStatus);
+        cabDetails.setLastUpdatedStatusTime(new Date());
     }
 
     public void updateCabLocation(@NonNull final String cabId, @NonNull final Location newLocation) {
@@ -40,4 +38,25 @@ public class CabsManager {
 
         cabs.get(cabId).setCurrLocation(newLocation);
     }
+
+    public void endCabTrip(@NonNull final Cab cab, @NonNull final Location toLocation) {
+        if (!cabs.containsKey(cab.getId())) {
+            throw new CabNotFoundException("Cab Not Found!!!");
+        }
+
+        cabs.get(cab.getId()).setCurrLocation(toLocation);
+        cabs.get(cab.getId()).setStatus(CabStatus.IDLE);
+        cabs.get(cab.getId()).setLastUpdatedStatusTime(new Date());
+    }
+
+    public List<Cab> getCabs(@NonNull final Location fromLoc) {
+        List<Cab> result = new ArrayList<>();
+        for (Cab cab : cabs.values()) {
+            if (cab.getCurrLocation().equals(fromLoc)) {
+                result.add(cab);
+            }
+        }
+        return result;
+    }
+
 }

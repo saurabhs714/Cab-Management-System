@@ -1,6 +1,7 @@
 package com.cabbooking.model;
 
 import com.cabbooking.constants.TripStatus;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -8,10 +9,10 @@ import lombok.ToString;
 public class Trip {
 
     private Rider rider;
-    private Cab cab;
+    @Getter private Cab cab;
     private TripStatus status;
     private Location fromLocation;
-    private Location toLocation;
+    @Getter private Location toLocation;
 
     public Trip(
             @NonNull final Rider rider,
