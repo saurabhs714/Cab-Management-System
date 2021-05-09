@@ -1,6 +1,6 @@
 **Low Level System Design - Cab Management System**
 
-Functionalities included in this project :-
+**Functionalities**
 1. Register cabs.
 2. Onboard various cities where cab services are provided.
 3. Change current city (location) of any cab.
@@ -11,9 +11,9 @@ available , use the following strategy;
 a. Find out which cab has remained idle the most and assign it.
 b. In case of clash above, randomly assign any cab
 
-P**roject Requirements**
+**Project Requirements**
 1. JDK 1.8
 2. Maven
 
-Assumption :-
+**Assumption**
 A cab once assigned a trip cannot cancel/reject it
