@@ -19,7 +19,7 @@ public class DefaultCabMatchingStrategy implements CabMatchingStrategy {
         Cab selectedCab = null;
 
         for(Cab cab : candidateCabs) {
-        long diffInSec = (cab.getLastUpdatedStatusTime().getTime() - currTime.getTime())/ 1000 % 60;
+        long diffInSec = (currTime.getTime() - cab.getLastUpdatedStatusTime().getTime())/ 1000 % 60;
 
         if(diffInSec > maxIdleTime) {
             maxIdleTime = diffInSec;

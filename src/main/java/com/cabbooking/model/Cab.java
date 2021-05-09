@@ -15,9 +15,10 @@ public class Cab {
     @Setter private CabStatus status;
     @Setter private Date lastUpdatedStatusTime;
 
-    public Cab(String id, String driverName) {
+    public Cab(String id, String driverName, Location currLocation) {
         this.id = id;
         this.driverName = driverName;
+        this.currLocation = currLocation;
         this.status = CabStatus.IDLE;
         this.lastUpdatedStatusTime = new Date();
     }

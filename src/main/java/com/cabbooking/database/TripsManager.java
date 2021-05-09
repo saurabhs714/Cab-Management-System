@@ -27,25 +27,27 @@ public class TripsManager {
     public TripsManager(
             CabsManager cabsManager,
             RidersManager ridersManager,
-            CabMatchingStrategy cabMatchingStrategy) {
+            CabMatchingStrategy cabMatchingStrategy,
+            LocationManager locationManager) {
         this.cabsManager = cabsManager;
         this.ridersManager = ridersManager;
         this.cabMatchingStrategy = cabMatchingStrategy;
+        this.locationManager = locationManager;
     }
 
-    public void createTrip(
+    public Trip createTrip(
             @NonNull final Rider rider,
             @NonNull final Location fromLoc,
             @NonNull final Location toLoc) {
 
-        if(locationManager.isLocationExist(fromLoc) || locationManager.isLocationExist(toLoc)) {
+        if(!locationManager.isLocationExist(fromLoc) || !locationManager.isLocationExist(toLoc)) {
             throw new ServiceNotAvailableException("Selected Destinations is not servable!!!");
         }
 
         final List<Cab> closeByCabs =
                 cabsManager.getCabs(fromLoc);
         final List<Cab> availableCabs = closeByCabs.stream()
-                        .filter(cab -> cab.getStatus().equals(CabStatus.ON_TRIP))
+                        .filter(cab -> cab.getStatus().equals(CabStatus.IDLE))
                         .collect(Collectors.toList());
 
         final Cab selectedCab =
@@ -60,6 +62,8 @@ public class TripsManager {
         }
         trips.get(selectedCab.getId()).add(newTrip);
         selectedCab.setStatus(CabStatus.ON_TRIP);
+        System.out.println("Trip Created for CabId :- " + selectedCab.getId());
+        return newTrip;
     }
 
     public List<Trip> tripHistory(@NonNull final String cabId) {
@@ -71,6 +75,11 @@ public class TripsManager {
 
     public void endTrip(@NonNull final Trip trip) {
         Cab cab = trip.getCab();
+        trips.get(cab.getId()).forEach((x) -> {
+            if(x.getCab().getId().equals(cab.getId())) {
+                x.endTrip();
+            }
+        });
         cabsManager.endCabTrip(cab, trip.getToLocation());
     }
 }
